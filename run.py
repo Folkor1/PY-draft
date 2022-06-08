@@ -124,7 +124,7 @@ def login_user():
     while True:
         try:
             if login_input not in login.col_values(1):
-                print('No such a user exists. Please enter the correct username.\n')
+                print(f'No such user "{login_input}" exists. Please enter the correct username.\n')
                 login_user()
             else:
                 print('succ')
