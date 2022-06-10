@@ -125,27 +125,24 @@ def start():
             while True:
                 if len(matrix_data) == 2:
                     matrix.extend(matrix_2x2(matrix_input))
+                    print(matrix)
                     return matrix
-                elif len(matrix_data) == 3:
+                if len(matrix_data) == 3:
                     matrix.extend(matrix_3x3(matrix_input))
+                    print(matrix)
                     return matrix
-                elif len(matrix_data) == 4:
+                if len(matrix_data) == 4:
                     matrix.extend(matrix_4x4(matrix_input))
+                    print(matrix)
                     return matrix
-
-          
-    
-def res():
-    var = start()
-    print(var)
-                
+         
 def matrix_2x2(two_x2):
     """
     Build 2x2 matrix.
     """
+    two_x2 = []
     while True:
         print('\nEnter another 2 numbers:')
-        two_x2 = []
         row_2_2_input = input()
         row_2_2_data = row_2_2_input.split(',')
         if validate_row_2_2(row_2_2_data):
@@ -156,9 +153,9 @@ def matrix_3x3(three_x3):
     """
     Build 3x3 matrix.
     """
+    three_x3 = []
     while True:
         print('\nEnter another 3 numbers:')
-        three_x3 = []
         row_2_3_input = input()
         row_2_3_data = row_2_3_input.split(',')
         if validate_matrix_x3(row_2_3_data):
@@ -175,9 +172,9 @@ def matrix_4x4(four_x4):
     """
     Build 4x4 matrix.
     """
+    four_x4 = []
     while True:
         print('\nEnter another 4 numbers:')
-        four_x4 = []
         row_2_4_input = input()
         row_2_4_data = row_2_4_input.split(',')
         if validate_matrix_x4(row_2_4_data):
@@ -251,13 +248,5 @@ def validate_matrix_x4(values):
     except ValueError as e:
         print(f"Invalid data: {e}. Please try again.")
         return False
-
-class Matrix:
-    """
-    Matrix class.
-    """
-    def __init__(self, rows, columns):
-        self.rows = rows
-        self.columns = columns
 
 welcome()
