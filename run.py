@@ -1,5 +1,6 @@
 import gspread
 import os
+import numpy as np
 from google.oauth2.service_account import Credentials
 
 SCOPE = [
@@ -16,6 +17,13 @@ SHEET = GSPREAD_CLIENT.open('Enter_the_Matrix')
 class colors:
     GREEN = '\033[92m'
     WHITE = '\033[97m'
+
+class Matrix:
+    def __init__(self, row):
+        self.row = row
+
+    def built_matrix(self):
+        return f"{self.row}"
 
 def welcome():
     """
@@ -75,7 +83,7 @@ def clear_console():
 
 def how_to():
     """
-    Show 'How to' text.
+    Show 'How to' text and show the logged in menu.
     """
     print('=' * 90)
     print('\nHow to:')
@@ -89,28 +97,39 @@ def how_to():
     print(colors.GREEN + '   9   7   6')
     print(colors.WHITE + '   \nThe matrix determinant is: -201')
     print('=' * 90)
-    loggen_in_menu()
+    logged_in_menu()
 
-def loggen_in_menu():
+def logged_in_menu():
     """
-    Start calculations or return to main screen.
+    Call the matrix building function or return to the main screen.
     """
     print('\n\nSelect one of the following options:')
     print("\n1 - start")
     print("2 - return to the main screen")
     logged_input = input()
     if logged_input == "1":
-        start()
+        build()
     elif logged_input == "2":
         clear_console()
         welcome()
     else:
         print(f"\nYou entered: {logged_input}. Please enter 1 or 2.")
-        loggen_in_menu()
+        logged_in_menu()
+
+def build():
+    """
+    Pull data from matrix class and build the matrix.
+    """      
+    build_matrix = Matrix(start())
+    arr = build_matrix.built_matrix()
+    arr = arr.split()
+    print(f"\nHere is your {len(build_matrix.row)}x{len(build_matrix.row)} matrix:\n")
+    for i in range(len(arr)):
+        print(colors.GREEN + "      " + arr[i].replace("[", "").replace("'", "").replace(",", "   ").replace("]", ""))
 
 def start():
     """
-    Define and build the matrix.
+    Get the list of numbers.
     """
     clear_console()
     print('\n\nStarting...')
@@ -123,79 +142,17 @@ def start():
         if validate_first_input(matrix_data):
             matrix.append(matrix_input)
             while True:
-                if len(matrix_data) == 2:
-                    matrix.extend(matrix_2x2(matrix_input))
-                    print(matrix)
-                    return matrix
-                if len(matrix_data) == 3:
-                    matrix.extend(matrix_3x3(matrix_input))
-                    print(matrix)
-                    return matrix
-                if len(matrix_data) == 4:
-                    matrix.extend(matrix_4x4(matrix_input))
-                    print(matrix)
-                    return matrix
-         
-def matrix_2x2(two_x2):
-    """
-    Build 2x2 matrix.
-    """
-    two_x2 = []
-    while True:
-        print('\nEnter another 2 numbers:')
-        row_2_2_input = input()
-        row_2_2_data = row_2_2_input.split(',')
-        if validate_row_2_2(row_2_2_data):
-            two_x2.append(row_2_2_input)
-            return two_x2
-
-def matrix_3x3(three_x3):
-    """
-    Build 3x3 matrix.
-    """
-    three_x3 = []
-    while True:
-        print('\nEnter another 3 numbers:')
-        row_2_3_input = input()
-        row_2_3_data = row_2_3_input.split(',')
-        if validate_matrix_x3(row_2_3_data):
-            three_x3.append(row_2_3_input)
-            while True:
-                print('\nEnter final 3 numbers:')
-                row_3_3_input = input()
-                row_3_3_data = row_3_3_input.split(',')
-                if validate_matrix_x3(row_3_3_data):
-                    three_x3.append(row_3_3_input)
-                    return three_x3
-
-def matrix_4x4(four_x4):
-    """
-    Build 4x4 matrix.
-    """
-    four_x4 = []
-    while True:
-        print('\nEnter another 4 numbers:')
-        row_2_4_input = input()
-        row_2_4_data = row_2_4_input.split(',')
-        if validate_matrix_x4(row_2_4_data):
-            four_x4.append(row_2_4_input)
-            while True:
-                print('\nEnter another 4 numbers:')
-                row_3_4_input = input()
-                row_3_4_data = row_3_4_input.split(',')
-                if validate_matrix_x4(row_3_4_data):
-                    four_x4.append(row_3_4_input)
-                    while True:
-                        print('\nEnter final 4 numbers:')
-                        row_4_4_input = input()
-                        row_4_4_data = row_4_4_input.split(',')
-                        if validate_matrix_x4(row_4_4_data):
-                            four_x4.append(row_4_4_input)
-                            return four_x4
+                print(f"\nEnter another {len(matrix_data)} numbers:")
+                next_input = input()
+                next_data = next_input.split(',')
+                if validate_next(matrix_data, next_data):
+                    matrix.append(next_input)
+                    if len(matrix) == len(matrix_data):
+                        return matrix
 
 def validate_first_input(values):
     """
-    Validate the first input, if 2, 3 or 4 numbers are entered.
+    Validate the first input, whether 2, 3 or 4 numbers are entered.
     """
     try:
         [int(value) for value in values]
@@ -204,49 +161,22 @@ def validate_first_input(values):
         else:
             return True
     except ValueError as e:
-        print(f"Invalid data: {e}. Please try again.")
+        print(f"{e}. Please try again.")
         return False
 
-def validate_row_2_2(values):
+def validate_next(value1, value2):
     """
-    Validate the second input with 2 values.
+    Validate next after the first inputs.
     """
     try:
-        [int(value) for value in values]
-        if len(values) != 2:
-            print(f"\nNeed to enter 2 numbers. You entered: {len(values)}")
+        [int(val1) for val1 in value1]
+        [int(val2) for val2 in value2]
+        if len(value1) != len(value2):
+            print(f"\nNeed to enter {len(value1)} numbers. You entered: {len(value2)}")
         else:
             return True
     except ValueError as e:
-        print(f"Invalid data: {e}. Please try again.")
-        return False
-
-def validate_matrix_x3(values):
-    """
-    Validate the second input with 3 values.
-    """
-    try:
-        [int(value) for value in values]
-        if len(values) != 3:
-            print(f"\nNeed to enter 3 numbers. You entered: {len(values)}")
-        else:
-            return True
-    except ValueError as e:
-        print(f"Invalid data: {e}. Please try again.")
-        return False
-
-def validate_matrix_x4(values):
-    """
-    Validate the second input with 3 values.
-    """
-    try:
-        [int(value) for value in values]
-        if len(values) != 4:
-            print(f"\nNeed to enter 4 numbers. You entered: {len(values)}")
-        else:
-            return True
-    except ValueError as e:
-        print(f"Invalid data: {e}. Please try again.")
+        print(f"{e}. Please try again.")
         return False
 
 welcome()
