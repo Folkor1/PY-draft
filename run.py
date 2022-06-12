@@ -1,6 +1,5 @@
 import gspread
 import os
-import numpy as np
 from google.oauth2.service_account import Credentials
 
 SCOPE = [
@@ -20,16 +19,13 @@ class colors:
 
 class Matrix:
     """
-    Matrix class.
+    Matrix superclass.
     """
     def __init__(self, num1, num2, num3, num4):
         self.num1 = num1
         self.num2 = num2
         self.num3 = num3
         self.num4 = num4
-
-    def built_matrix(self):
-        return f"{self.num1}"
     
     def calc_2x2(self):
         return self.num1 * self.num4 - self.num2 * self.num3
@@ -65,6 +61,7 @@ class Matrix_3x3(Matrix):
         d = self.num3 * self.num5 * self.num7
         e = self.num2 * self.num4 * self.num9
         f = self.num1 * self.num6 * self.num8
+        
         return a + b + c - d - e - f
 
 class Matrix_4x4(Matrix):
@@ -159,6 +156,7 @@ def start_menu():
         start_menu()
 
 def create_user():
+    lo = []
     login = SHEET.worksheet('creds')
     login_col = login.col_values(1)
     new_user = input("Please type in a new username: ")
@@ -166,14 +164,12 @@ def create_user():
         print("\nUsername already exist. Please enter another one.\n")
         create_user()
     else:
-        login_col.append(123)
-        print('appended')
+        lo.append(new_user)
+        print(lo)
+        return lo
+    
 
-def app(test, worksheet):
-    logg = SHEET.worksheet(worksheet)
-    logg.append_row(test)
-
-app(123, "creds")
+create_user()
 
 def login_user():
     """
@@ -346,7 +342,6 @@ def start():
                     if len(matrix) == len(matrix_data):
                         return matrix
 
-
 def validate_first_input(values):
     """
     Validate the first input, whether 2, 3 or 4 numbers are entered.
@@ -360,8 +355,6 @@ def validate_first_input(values):
     except ValueError as e:
         print(f"{e}. Please try again.")
         return False
-
-
 
 def validate_next(value1, value2):
     """
@@ -377,6 +370,5 @@ def validate_next(value1, value2):
     except ValueError as e:
         print(f"{e}. Please try again.")
         return False
-
 
 # welcome()
