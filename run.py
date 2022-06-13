@@ -221,7 +221,7 @@ def clear_console():
 
 def how_to():
     """
-    Show 'How to' text and show the logged-in menu.
+    Show 'How to' text and the logged-in menu.
     """
     print('=' * 90)
     print('\nHow to:')
@@ -256,7 +256,8 @@ def logged_in_menu():
 
 def build():
     """
-    Display the matrix and its determinant.
+    Get the matrix input then calculate and display
+    the determinant.
     """      
     build_matrix = start()
     print("\n" + "=" * 32)
@@ -279,6 +280,9 @@ def build():
     try_again()
 
 def try_again():
+    """
+    Build another matrix or return to the main screen.
+    """
     print('\n\nSelect one of the following options:')
     print("\n1 - try again")
     print("2 - return to the main screen")
