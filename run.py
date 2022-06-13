@@ -42,6 +42,9 @@ def welcome():
     start_menu()
 
 def start_menu():
+    """
+    Create username or login.
+    """
     print('\n\nSelect one of the following options:')
     print("\n1 - create username")
     print("2 - login")
@@ -84,6 +87,7 @@ def purge():
     login = SHEET.worksheet('creds')
     login_col = login.col_values(1)
     pass_col = login.col_values(2)
+
     last_login = list(filter(None, login_col))
     last_login_n = str(len(last_login))
 
@@ -99,10 +103,10 @@ def new_pass():
     """
     login = SHEET.worksheet('creds')
     login_col = login.col_values(2)
-    new_pass = input("Please type in a new password: ")
+    newpass = input("Please type in a new password: ")
     free_cell = list(filter(None, login_col))
     up = str(len(free_cell) + 1)
-    login.update_cell(up, 2, new_pass)
+    login.update_cell(up, 2, newpass)
     clear_console()
     print('\n\nCredentials sucessfully created!')
     creds_created()
@@ -260,9 +264,9 @@ def build():
     the determinant.
     """      
     build_matrix = start()
-    print("\n" + "=" * 32)
     clear_console()
-    print(f"\n\nHere is your {len(build_matrix)}x{len(build_matrix)} matrix:\n")
+    print("\n\n" + "=" * 32)
+    print(f"Here is your {len(build_matrix)}x{len(build_matrix)} matrix:\n")
     for i in range(len(build_matrix)):
         print(colors.GREEN + "      " + build_matrix[i].replace("[", "").replace("'", "").replace(",", "   ").replace("]", ""))
     array = str(build_matrix).replace("[", "").replace("'", "").replace("]", "")
@@ -299,7 +303,7 @@ def try_again():
 
 def start():
     """
-    Get the list of numbers depending on the first imput,
+    Get the list of numbers depending on the first input,
     i.e. amount of numbers entered in each input should match.
     """
     clear_console()
