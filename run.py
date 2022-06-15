@@ -25,9 +25,11 @@ def welcome():
     """
     Welcome message.
     """
+    a = "Hello and welcome to this"
+    b = "very useful matrix determinant finder tool!"
     print("\n\n")
     print("=" * 70)
-    print("Hello and welcome to this very useful matrix determinant finder tool!")
+    print(a + b)
     print("=" * 70)
     print("\n                               Enter the")
     print(colors.GREEN + "              __  __           _            _        ")
@@ -66,7 +68,7 @@ def create_user():
     """
     purge()
     print("Done!\n\n")
-    login = SHEET.worksheet('creds')
+    login = SHEET.worksheet('login')
     login_col = login.col_values(1)
     new_user = input("Please type in a new username: ")
     if new_user in login_col:
@@ -76,7 +78,7 @@ def create_user():
     else:
         print("\nUsername available.\n")
         free_cell = list(filter(None, login_col))
-        up =  str(len(free_cell) + 1)
+        up = str(len(free_cell) + 1)
         login.update_cell(up, 1, new_user)
         new_pass()
 
@@ -84,9 +86,10 @@ def purge():
     """
     Purge the username cell if password is missing for it.
     """
-    login = SHEET.worksheet('creds')
+    login = SHEET.worksheet('login')
+    password = SHEET.worksheet('pass')
     login_col = login.col_values(1)
-    pass_col = login.col_values(2)
+    pass_col = password.col_values(1)
 
     last_login = list(filter(None, login_col))
     last_login_n = str(len(last_login))
@@ -101,12 +104,12 @@ def new_pass():
     """
     Create a password once username is created.
     """
-    login = SHEET.worksheet('creds')
-    login_col = login.col_values(2)
+    password = SHEET.worksheet('pass')
+    pass_col = password.col_values(1)
     newpass = input("Please type in a new password: ")
-    free_cell = list(filter(None, login_col))
+    free_cell = list(filter(None, pass_col))
     up = str(len(free_cell) + 1)
-    login.update_cell(up, 2, newpass)
+    password.update_cell(up, 1, newpass)
     clear_console()
     print('\n\nCredentials sucessfully created!')
     creds_created()
@@ -137,16 +140,16 @@ def retry_new_user():
     print('\n\nSelect one of the following options:')
     print("\n1 - retry new username")
     print("2 - return to the main screen")
-    retry__new_name_input = input()
-    if retry__new_name_input == "1":
+    retry_new_name_input = input()
+    if retry_new_name_input == "1":
         clear_console()
         print("\n\nLoading...\n\n")
         create_user()
-    elif retry__new_name_input == "2":
+    elif retry_new_name_input == "2":
         clear_console()
         welcome()
     else:
-        print(f"\nYou entered: {retry__new_name_input}. Please enter 1 or 2.")
+        print(f"\nYou entered: {retry_new_name_input}. Please enter 1 or 2.")
         retry_new_user()
 
 def login_user():
@@ -154,9 +157,9 @@ def login_user():
     Display the login message and validate the user/password input.
     """
     login_input = input('\nType in the username: ')
-    login = SHEET.worksheet('creds')
+    login = SHEET.worksheet('login')
+    password = SHEET.worksheet('pass')
     login_col = login.col_values(1)
-    pass_col = login.col_values(2)
     while True:
         try:
             if login_input not in login_col:
@@ -164,11 +167,10 @@ def login_user():
                 retry_name()
             else:
                 print('Username correct.\n')
+                login_cell = login.find(login_input)
                 pass_input = input('Type in password: ')
-                if pass_input not in pass_col:
-                    print('\nIncorrect password.\n')
-                    retry_pass()
-                elif login_col.index(login_input) != pass_col.index(pass_input):
+                pass_cell = password.cell(login_cell.row, 1).value
+                if pass_input != pass_cell:
                     print('\nIncorrect password.\n')
                     retry_pass()
                 else:

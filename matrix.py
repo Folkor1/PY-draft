@@ -27,7 +27,8 @@ class Matrix_3x3(Matrix):
     3x3 matrix class,
     calculates 3x3 matrix determinant.
     """
-    def __init__(self, num1, num2, num3, num4, num5, num6, num7, num8, num9):
+    def __init__(self, num1, num2, num3, num4, num5, num6, num7, 
+    num8, num9):
         Matrix.__init__(self, num1, num2, num3, num4)
         self.num5 = num5
         self.num6 = num6
@@ -50,7 +51,8 @@ class Matrix_4x4(Matrix):
     4x4 matrix class,
     calculates 4x4 matrix determinant.
     """
-    def __init__(self, num1, num2, num3, num4, num5, num6, num7, num8, num9, num10, num11, num12, num13, num14, num15, num16):
+    def __init__(self, num1, num2, num3, num4, num5, num6, num7,
+     num8, num9, num10, num11, num12, num13, num14, num15, num16):
         Matrix.__init__(self, num1, num2, num3, num4)
         self.num5 = num5
         self.num6 = num6
